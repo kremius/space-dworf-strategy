@@ -21,79 +21,79 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Sources\Audio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="constcpp.cpp">
+    <ClCompile Include="Sources\camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ApproxGLImage.cpp">
-      <Filter>Source Files\Visual</Filter>
-    </ClCompile>
-    <ClCompile Include="ASpritesClass.cpp">
-      <Filter>Source Files\Visual</Filter>
-    </ClCompile>
-    <ClCompile Include="GLSprite.cpp">
-      <Filter>Source Files\Visual</Filter>
-    </ClCompile>
-    <ClCompile Include="Screen.cpp">
-      <Filter>Source Files\Visual</Filter>
-    </ClCompile>
-    <ClCompile Include="sprite.cpp">
-      <Filter>Source Files\Visual</Filter>
-    </ClCompile>
-    <ClCompile Include="Text.cpp">
-      <Filter>Source Files\Visual</Filter>
-    </ClCompile>
-    <ClCompile Include="camera.cpp">
+    <ClCompile Include="Sources\constcpp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="map.cpp">
+    <ClCompile Include="Sources\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="object.cpp">
+    <ClCompile Include="Sources\map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Audio.cpp">
+    <ClCompile Include="Sources\object.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\ApproxGLImage.cpp">
+      <Filter>Source Files\Visual</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\ASpritesClass.cpp">
+      <Filter>Source Files\Visual</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\GLSprite.cpp">
+      <Filter>Source Files\Visual</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Screen.cpp">
+      <Filter>Source Files\Visual</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\sprite.cpp">
+      <Filter>Source Files\Visual</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Text.cpp">
+      <Filter>Source Files\Visual</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="constheader.h">
+    <ClInclude Include="Sources\camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ApproxGLImage.h">
-      <Filter>Header Files\Visual</Filter>
-    </ClInclude>
-    <ClInclude Include="ASpritesClass.h">
-      <Filter>Header Files\Visual</Filter>
-    </ClInclude>
-    <ClInclude Include="GLSprite.h">
-      <Filter>Header Files\Visual</Filter>
-    </ClInclude>
-    <ClInclude Include="Screen.h">
-      <Filter>Header Files\Visual</Filter>
-    </ClInclude>
-    <ClInclude Include="sprite.h">
-      <Filter>Header Files\Visual</Filter>
-    </ClInclude>
-    <ClInclude Include="Text.h">
-      <Filter>Header Files\Visual</Filter>
-    </ClInclude>
-    <ClInclude Include="camera.h">
+    <ClInclude Include="Sources\constheader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="object.h">
+    <ClInclude Include="Sources\enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="map.h">
+    <ClInclude Include="Sources\map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="enemy.h">
+    <ClInclude Include="Sources\object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Audio.h">
+    <ClInclude Include="Sources\ApproxGLImage.h">
+      <Filter>Header Files\Visual</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\ASpritesClass.h">
+      <Filter>Header Files\Visual</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\GLSprite.h">
+      <Filter>Header Files\Visual</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Audio.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Screen.h">
+      <Filter>Header Files\Visual</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Text.h">
+      <Filter>Header Files\Visual</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\sprite.h">
+      <Filter>Header Files\Visual</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

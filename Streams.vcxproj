@@ -10,6 +10,34 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Sources\ApproxGLImage.cpp" />
+    <ClCompile Include="Sources\ASpritesClass.cpp" />
+    <ClCompile Include="Sources\Audio.cpp" />
+    <ClCompile Include="Sources\camera.cpp" />
+    <ClCompile Include="Sources\constcpp.cpp" />
+    <ClCompile Include="Sources\GLSprite.cpp" />
+    <ClCompile Include="Sources\main.cpp" />
+    <ClCompile Include="Sources\map.cpp" />
+    <ClCompile Include="Sources\object.cpp" />
+    <ClCompile Include="Sources\Screen.cpp" />
+    <ClCompile Include="Sources\sprite.cpp" />
+    <ClCompile Include="Sources\Text.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Sources\ApproxGLImage.h" />
+    <ClInclude Include="Sources\ASpritesClass.h" />
+    <ClInclude Include="Sources\Audio.h" />
+    <ClInclude Include="Sources\camera.h" />
+    <ClInclude Include="Sources\constheader.h" />
+    <ClInclude Include="Sources\enemy.h" />
+    <ClInclude Include="Sources\GLSprite.h" />
+    <ClInclude Include="Sources\map.h" />
+    <ClInclude Include="Sources\object.h" />
+    <ClInclude Include="Sources\Screen.h" />
+    <ClInclude Include="Sources\sprite.h" />
+    <ClInclude Include="Sources\Text.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B7BCBC29-6C32-438B-8F68-E9C099F2BC74}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -77,34 +105,6 @@
       <AdditionalDependencies>glu32.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="ApproxGLImage.cpp" />
-    <ClCompile Include="ASpritesClass.cpp" />
-    <ClCompile Include="Audio.cpp" />
-    <ClCompile Include="camera.cpp" />
-    <ClCompile Include="constcpp.cpp" />
-    <ClCompile Include="GLSprite.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="map.cpp" />
-    <ClCompile Include="object.cpp" />
-    <ClCompile Include="Screen.cpp" />
-    <ClCompile Include="sprite.cpp" />
-    <ClCompile Include="Text.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ApproxGLImage.h" />
-    <ClInclude Include="ASpritesClass.h" />
-    <ClInclude Include="Audio.h" />
-    <ClInclude Include="camera.h" />
-    <ClInclude Include="constheader.h" />
-    <ClInclude Include="enemy.h" />
-    <ClInclude Include="GLSprite.h" />
-    <ClInclude Include="map.h" />
-    <ClInclude Include="object.h" />
-    <ClInclude Include="Screen.h" />
-    <ClInclude Include="sprite.h" />
-    <ClInclude Include="Text.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
