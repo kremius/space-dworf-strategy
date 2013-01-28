@@ -1,0 +1,2 @@
+(5:29:15) Deirz: for i in *.cpp ; do g++ -std=c++11 -I /usr/include/SDL -c $i ; done
+(5:29:29) Deirz: g++ -lSDL -lGL -lGLU -lSDL_ttf -lSDL_image *.o -o Streams
