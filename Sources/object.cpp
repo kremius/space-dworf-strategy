@@ -47,7 +47,7 @@ void Producer::Process()
     }, posx(), posy(), 3);
     if (max_energy() != energy())
         ++state_counter_;
-    angle_ = state_counter_ % 360;
+    angle_ = static_cast<float>(state_counter_ % 360);
 }
 
 void Keeper::Process()
@@ -72,7 +72,7 @@ void Keeper::Process()
 void Drill::Process()
 {
     Object::Process();
-    angle_ = state_counter_ % 360;
+    angle_ = static_cast<float>(state_counter_ % 360);
 
     if (click_state() == true)
     {

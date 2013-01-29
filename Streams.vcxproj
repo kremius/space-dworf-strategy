@@ -71,7 +71,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\SDL_ttf-2.0.10\SDL_ttf-2.0.10;C:\Users\my\Downloads\SDL-devel-1.2.14-VC8\SDL-1.2.14\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
+    <IncludePath>D:\SDL_mixer-devel-1.2.12-VC\SDL_mixer-1.2.12\include;D:\SDL_ttf-2.0.10\SDL_ttf-2.0.10;C:\Users\my\Downloads\SDL-devel-1.2.14-VC8\SDL-1.2.14\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

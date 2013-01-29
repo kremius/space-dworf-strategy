@@ -63,8 +63,8 @@ int main(int argc, char* argv[])
     SYSTEM_STREAM << " End TTF init\n";
     atexit(TTF_Quit);
 
-    Audio au;
-    helpers::InitAudio(&au);
+    Audio* au = new Audio;
+    helpers::InitAudio(au);
 
     while(true)
     {
@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
             }
             else if (event.type == SDL_MOUSEBUTTONUP)
             {
-                // GetAudio()->Play("click.wav");
+                GetAudio()->Play("click__.wav");
             }
         }
 
