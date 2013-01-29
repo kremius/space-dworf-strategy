@@ -1,8 +1,1 @@
-Debug
-ipch
-Release
-Releases
-Streams.sdf
-Streams.suo
-Streams.opensdf
-Streams.vcxproj.user
+*.o
