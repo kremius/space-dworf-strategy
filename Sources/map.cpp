@@ -94,6 +94,7 @@ void Map::Draw()
                               holder_[i][j]->state_h(),
                               holder_[i][j]->angle());
         }
+    GetEnemyHolder()->Draw();
 }
  
 void Map::ForEach(std::function<void(Object*)> callback,
@@ -110,4 +111,34 @@ void Map::ForEach(std::function<void(Object*)> callback,
     for (int i = std::max(posx - range, 0); i <= std::min(posx + range, sizeWmap - 1); ++i)
         for (int j = std::max(posy - range, 0); j <= std::min(posy + range, sizeHmap - 1); ++j)
             callback(holder_[i][j]);
+}
+
+Map::EnemyHolder::EnemyHolder()
+{
+}
+
+void Map::EnemyHolder::Draw()
+{
+    for (int i = 0; i < sizeWmap; ++i)
+        for (int j = 0; j < sizeHmap; ++j)
+        {
+            auto it = holder_[i][j].begin();
+            while (it != holder_[i][j].end())
+            {
+                int x = (*it)->pixel_x() - GetCamera()->pixel_x();
+                int y = (*it)->pixel_y() - GetCamera()->pixel_y();
+
+                GetScreen()->Draw((*it)->sprite(), 
+                                  x, y,
+                                  (*it)->state_w(),
+                                  (*it)->state_h(),
+                                  (*it)->angle());
+                ++it;
+            }
+        }
+}
+
+void Map::EnemyHolder::Move(Enemy* enemy, int step_x, int step_y)
+{
+
 }

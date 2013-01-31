@@ -2,9 +2,11 @@
 
 #include <array>
 #include <functional>
+#include <list>
 
 #include "camera.h"
 #include "constheader.h"
+#include "enemy.h"
 #include "object.h"
 
 class Player
@@ -47,8 +49,21 @@ namespace helpers
 class Map
 {
 public:
+    class EnemyHolder
+    {
+    public:
+        typedef std::list<Enemy*> HolderType;
+        typedef std::array<HolderType, sizeHmap> InsideType;
+        EnemyHolder();
+        Enemy* GetNearest(int posx, int posy);
+        void Move(Enemy* enemy, int step_x, int step_y);
+        void Draw();
+    private:
+        std::array<InsideType, sizeWmap> holder_;
+    };
     typedef Object* HolderType;
     typedef std::array<HolderType, sizeHmap> InsideType;
+
     Map();
 
     InsideType& operator[](size_t number)
@@ -59,7 +74,13 @@ public:
     void Draw();
     void ForEach(std::function<void(Object*)> callback,
                  int posx = -1, int posy = -1, int range = -1);
+    EnemyHolder* GetEnemyHolder()
+    {
+        return &enemy_holder_;
+    }
 private:
+    EnemyHolder enemy_holder_;
+
     std::array<InsideType, sizeWmap> holder_;
 };
 
