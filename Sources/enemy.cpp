@@ -10,7 +10,7 @@ Enemy::Enemy(int pixel_x, int pixel_y)
     state_h_(0),
     state_w_(0) 
     {
-        SetSprite("jew.png");
+        SetSprite("jew.png", 1, 1);
     }
 
 void Enemy::Move(int step_x_, int step_y_)

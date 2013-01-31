@@ -56,6 +56,7 @@ public:
         typedef std::array<HolderType, sizeHmap> InsideType;
         EnemyHolder();
         Enemy* GetNearest(int posx, int posy);
+        bool Add(Enemy* enemy);
         void Move(Enemy* enemy, int step_x, int step_y);
         void Draw();
         void Process();

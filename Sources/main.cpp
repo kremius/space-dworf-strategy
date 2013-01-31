@@ -28,6 +28,14 @@ int main(int argc, char* argv[])
     ASprClass a_spr;
     helpers::InitASpr(&a_spr);
 
+    SYSTEM_STREAM << "Begin TTF init\n";
+    SYSTEM_STREAM << TTF_Init() << " - return\n";
+    SYSTEM_STREAM << " End TTF init\n";
+    atexit(TTF_Quit);
+
+    Audio* au = new Audio;
+    helpers::InitAudio(au);
+
     Camera camera;
     helpers::InitCamera(&camera);
 
@@ -36,7 +44,8 @@ int main(int argc, char* argv[])
 
     for (int i = 0; i != sizeWmap; ++i)
         for (int j = 0; j != sizeHmap; ++j)
-            if (rand() % 10 == 1)
+            if (rand() % 10 == 1 || i == 0        || j == 0
+                                 || i == sizeWmap - 1 || j == sizeHmap - 1)
                 (*GetMap())[i][j] = new Stone(i, j);
 
     Player player;
@@ -57,14 +66,6 @@ int main(int argc, char* argv[])
         str->clear();
         *str = conv.str();
     }).SetColor(250, 250, 30).SetFreq(10).SetPlace(300, 0).SetSize(16);
-
-    SYSTEM_STREAM << "Begin TTF init\n";
-    SYSTEM_STREAM << TTF_Init() << " - return\n";
-    SYSTEM_STREAM << " End TTF init\n";
-    atexit(TTF_Quit);
-
-    Audio* au = new Audio;
-    helpers::InitAudio(au);
 
     while(true)
     {

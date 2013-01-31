@@ -118,8 +118,8 @@ Map::EnemyHolder::EnemyHolder()
     for (int i = 0; i < sizeWmap; ++i)
         for (int j = 0; j < sizeHmap; ++j)
         {
-            if (rand() % 10)
-                continue;
+            //if (rand() % 10)
+            //    continue;
             holder_[i][j].push_back(new Enemy(i * 32, j * 32));
         }
 }
@@ -136,7 +136,7 @@ void Map::EnemyHolder::Draw()
                 int y = (*it)->pixel_y() - GetCamera()->pixel_y();
 
                 GetScreen()->Draw((*it)->sprite(), 
-                                  x, y,
+                                  x - 16, y - 16,
                                   (*it)->state_w(),
                                   (*it)->state_h(),
                                   (*it)->angle());
@@ -182,6 +182,9 @@ void Map::EnemyHolder::Move(Enemy* enemy, int step_x, int step_y)
     if (new_posy >= sizeHmap || new_posy < 0)
         return;
 
+    if (new_x < 0 || new_y < 0)
+        return;
+
     enemy->SetPixelX(new_x);
     enemy->SetPixelY(new_y);
 
@@ -196,4 +199,17 @@ void Map::EnemyHolder::Move(Enemy* enemy, int step_x, int step_y)
     
     auto& new_cont = holder_[new_posx][new_posy];
     new_cont.push_back(enemy);
+}
+
+bool Map::EnemyHolder::Add(Enemy* enemy)
+{
+    int add_x = enemy->pixel_x() / 32;
+    int add_y = enemy->pixel_y() / 32;
+
+    if (   add_x < 0         || add_y < 0
+        || add_x >= sizeWmap || add_y >= sizeHmap) // TODO: COPY PASTE COPY PASTE STOP IT
+        return false;
+    holder_[add_x][add_y]
+        .push_back(enemy);
+    return true;
 }
