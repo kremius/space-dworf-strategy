@@ -58,6 +58,7 @@ public:
         Enemy* GetNearest(int posx, int posy);
         void Move(Enemy* enemy, int step_x, int step_y);
         void Draw();
+        void Process();
     private:
         std::array<InsideType, sizeWmap> holder_;
     };
