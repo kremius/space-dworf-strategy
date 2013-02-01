@@ -100,9 +100,10 @@ int main(int argc, char* argv[])
                 else
                     click = true;
             }
-            else if (event.type == SDL_MOUSEBUTTONUP)
+            else if (event.type == SDL_KEYUP)
             {
-                //GetAudio()->Play("click__.wav");
+                if (event.key.keysym.sym == SDLK_j)
+                    GetMap()->GetEnemyHolder()->AddEnemy();
             }
         }
 
@@ -137,6 +138,7 @@ int main(int argc, char* argv[])
             }
             else
                 (*GetMap())[new_x][new_y]->Click();
+            
         glClear(GL_COLOR_BUFFER_BIT);
         
         GetMap()->Draw();

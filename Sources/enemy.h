@@ -49,9 +49,11 @@ public:
         return angle_;
     }
     virtual void Process();
+    virtual bool IsRocketFriend() const { return false; }
     void Move(int step_x_, int step_y_);
-private:
-    void ProcessSpeed();
+protected:
+    void ProcessSpeed(int pixel_x, int pixel_y, int force = 3);
+    void ProcessMove();
     float mass_;
     VDir speed_;
     int health_;
@@ -62,4 +64,26 @@ private:
     int pixel_x_;
     int pixel_y_;
     float angle_;
+};
+
+// Its just joke, srsly
+class Jew: public Enemy
+{
+public:
+    Jew(int x, int y) : Enemy(x, y) {}
+    virtual void Process() override;
+};
+
+class Rocket: public Enemy
+{
+public:
+    Rocket(int x, int y) : Enemy(x, y) 
+    {
+        length_ = 0;
+        SetSprite("rocket.png");
+    }
+    virtual void Process() override;
+    virtual bool IsRocketFriend() const { return true; }
+private:
+    int length_;
 };

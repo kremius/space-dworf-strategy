@@ -3,6 +3,7 @@
 #include <array>
 #include <functional>
 #include <list>
+#include <set>
 
 #include "camera.h"
 #include "constheader.h"
@@ -58,17 +59,21 @@ public:
         typedef std::list<Enemy*> HolderType;
         typedef std::array<HolderType, sizeHmap> InsideType;
         EnemyHolder();
-        Object* GetNearest(int x, int y);
+        bool Remove(Enemy* enemy);
         bool Add(Enemy* enemy);
+        void AddToDelete(Enemy* enemy);
+        void AddEnemy();
+        Enemy* GetNearest(Enemy* enemy, int radius = 7, std::function<bool(Enemy*)> predicate = [](Enemy*) {return true;});
         void Move(Enemy* enemy, int step_x, int step_y);
         void Draw();
         void Process();
     private:
+        std::set<Enemy*> delete_list_;
         std::array<InsideType, sizeWmap> holder_;
     };
 
     Map();
-
+    Object* GetNearest(int x, int y);
     InsideType& operator[](size_t number)
     {
         return holder_[number];

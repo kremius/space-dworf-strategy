@@ -115,12 +115,17 @@ void Map::ForEach(std::function<void(Object*)> callback,
 
 Map::EnemyHolder::EnemyHolder()
 {
+
+}
+
+void Map::EnemyHolder::AddEnemy()
+{
     for (int i = 0; i < sizeWmap; ++i)
         for (int j = 0; j < sizeHmap; ++j)
         {
-            if (rand() % 10)
+            if (rand() % 100)
                 continue;
-            holder_[i][j].push_back(new Enemy(i * 32, j * 32));
+            holder_[i][j].push_back(new Jew(i * 32, j * 32));
         }
 }
 
@@ -156,6 +161,14 @@ void Map::EnemyHolder::Process()
                 (*(it++))->Process();
             }
         }
+
+     for (auto it = delete_list_.begin(); it != delete_list_.end(); ++it)
+     {
+         Remove(*it);
+         delete *it;
+     }
+
+     delete_list_.erase(delete_list_.begin(), delete_list_.end());
 };
 
 void Map::EnemyHolder::Move(Enemy* enemy, int step_x, int step_y)
@@ -201,6 +214,18 @@ void Map::EnemyHolder::Move(Enemy* enemy, int step_x, int step_y)
     new_cont.push_back(enemy);
 }
 
+bool Map::EnemyHolder::Remove(Enemy* enemy)
+{
+    int rem_x = enemy->pixel_x() / 32;
+    int rem_y = enemy->pixel_y() / 32;
+
+    auto& cont = holder_[rem_x][rem_y];
+    auto it = std::find(cont.begin(), cont.end(), enemy);
+    assert(it != cont.end() && "Cannot find position of enemy");
+    cont.erase(it);
+    return true;
+}
+
 bool Map::EnemyHolder::Add(Enemy* enemy)
 {
     int add_x = enemy->pixel_x() / 32;
@@ -214,7 +239,48 @@ bool Map::EnemyHolder::Add(Enemy* enemy)
     return true;
 }
 
-Object* Map::EnemyHolder::GetNearest(int x, int y)
+void Map::EnemyHolder::AddToDelete(Enemy* enemy)
+{
+    delete_list_.insert(enemy);
+}
+
+Enemy* Map::EnemyHolder::GetNearest(Enemy* enemy, int radius, std::function<bool(Enemy*)> predicate)
+{
+    int x = enemy->pixel_x();
+    int y = enemy->pixel_y();
+
+    int from_posx = std::max(x / 32 - radius, 0);
+    int from_posy = std::max(y / 32 - radius, 0);
+
+    int to_posx = std::min(x / 32 + radius, sizeWmap - 1);
+    int to_posy = std::min(y / 32 + radius, sizeHmap - 1);
+
+    int min_radius = 999999999;
+    Enemy* retval = nullptr;
+
+    for (int i = from_posx; i <= to_posx; ++i)
+        for (int j = from_posy; j <= to_posy; ++j)
+        {
+            auto it = holder_[i][j].begin();
+            while (it != holder_[i][j].end())
+            {
+                if (predicate(*it))
+                {
+                    int new_radius = (*it)->pixel_x() * (*it)->pixel_x()
+                                    + (*it)->pixel_y() * (*it)->pixel_y();
+                    if (new_radius < min_radius && *it != enemy)
+                    {
+                        min_radius = new_radius;
+                        retval = *it;
+                    }
+                }
+                ++it;
+            }
+        }
+    return retval;
+};
+
+Object* Map::GetNearest(int x, int y)
 {
     //int posx = x / 32;
     //int posy = y / 32;
@@ -229,7 +295,7 @@ Object* Map::EnemyHolder::GetNearest(int x, int y)
             return;
         int diff_x = object->posx() * 32 - x;
         int diff_y = object->posy() * 32 - y;
-        float new_min_radius = diff_x * diff_x + diff_y * diff_y;
+        float new_min_radius = static_cast<float>(diff_x * diff_x + diff_y * diff_y);
         if (new_min_radius < min_radius)
         {
             min_radius = new_min_radius;
