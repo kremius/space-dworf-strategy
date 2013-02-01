@@ -213,3 +213,29 @@ bool Map::EnemyHolder::Add(Enemy* enemy)
         .push_back(enemy);
     return true;
 }
+
+Object* Map::EnemyHolder::GetNearest(int x, int y)
+{
+    //int posx = x / 32;
+    //int posy = y / 32;
+
+    float min_radius = 999999999.0f;
+    Object* nearest_object = nullptr;
+
+    GetMap()->ForEach([&](Object* object)
+    {
+        // TODO: new algorithm (from center x, y to border)
+        if (object == nullptr || !object->IsLine())
+            return;
+        int diff_x = object->posx() * 32 - x;
+        int diff_y = object->posy() * 32 - y;
+        float new_min_radius = diff_x * diff_x + diff_y * diff_y;
+        if (new_min_radius < min_radius)
+        {
+            min_radius = new_min_radius;
+            nearest_object = object;
+        }
+    });
+
+    return nearest_object;
+}

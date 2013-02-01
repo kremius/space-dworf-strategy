@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
             }
             else if (event.type == SDL_MOUSEBUTTONUP)
             {
-                GetAudio()->Play("click__.wav");
+                //GetAudio()->Play("click__.wav");
             }
         }
 

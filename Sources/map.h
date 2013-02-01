@@ -49,13 +49,16 @@ namespace helpers
 class Map
 {
 public:
+    typedef Object* HolderType;
+    typedef std::array<HolderType, sizeHmap> InsideType;
+
     class EnemyHolder
     {
     public:
         typedef std::list<Enemy*> HolderType;
         typedef std::array<HolderType, sizeHmap> InsideType;
         EnemyHolder();
-        Enemy* GetNearest(int posx, int posy);
+        Object* GetNearest(int x, int y);
         bool Add(Enemy* enemy);
         void Move(Enemy* enemy, int step_x, int step_y);
         void Draw();
@@ -63,8 +66,6 @@ public:
     private:
         std::array<InsideType, sizeWmap> holder_;
     };
-    typedef Object* HolderType;
-    typedef std::array<HolderType, sizeHmap> InsideType;
 
     Map();
 

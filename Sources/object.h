@@ -96,6 +96,8 @@ public:
         click_state_ = !click_state_;
     }
     virtual void Process();
+
+    // TODO: WTF? Rename 
     virtual bool IsLine() const { return true; }
 protected:
     bool click_state_;

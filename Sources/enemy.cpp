@@ -29,13 +29,18 @@ void Enemy::SetSprite(const std::string& name, int size_w, int size_h)
     sprite_ = GetASpr()->returnSpr(name, size_w, size_h);
 }
 
-void Enemy::Process()
+void Enemy::ProcessSpeed()
 {
-    // TODO: vectors
-    if (rand() % 3 == 1)
-        Move(speed_.x, speed_.y);
-    int diff_x = 750 - pixel_x();
-    int diff_y = 750 - pixel_y();
+    auto obj = GetMap()->GetEnemyHolder()->GetNearest(pixel_x(), pixel_y());
+
+    int diff_x = 0;
+    int diff_y = 0;
+    if (obj != nullptr)
+    {
+        diff_x = obj->posx() * 32 - pixel_x();
+        diff_y = obj->posy() * 32 - pixel_y();
+    }
+
 
     float radius = sqrt(static_cast<float>(diff_x * diff_x + diff_y * diff_y));
 
@@ -45,17 +50,26 @@ void Enemy::Process()
             speed_.y += static_cast<int>(3) * (1.0f * diff_y / radius);
     }
 
-    speed_.x += rand() % 7 - 3;
-    speed_.y += rand() % 7 - 3;
+    speed_.x += rand() % 15 - 7;
+    speed_.y += rand() % 15 - 7;
 
     if (speed_.x > 0)
-        speed_.x = std::min(speed_.x,  7);
+        speed_.x = std::min(speed_.x,  5);
     else
-        speed_.x = std::max(speed_.x, -7);
+        speed_.x = std::max(speed_.x, -5);
     if (speed_.y > 0)
-        speed_.y = std::min(speed_.y,  7);
+        speed_.y = std::min(speed_.y,  5);
     else
-        speed_.y = std::max(speed_.y, -7);
+        speed_.y = std::max(speed_.y, -5);
+}
+
+void Enemy::Process()
+{
+    // TODO: vectors
+    
+    Move(speed_.x, speed_.y);
+
+    ProcessSpeed();
 
     if (speed_.x == 0 && speed_.y == 0)
         ;

@@ -51,6 +51,7 @@ public:
     virtual void Process();
     void Move(int step_x_, int step_y_);
 private:
+    void ProcessSpeed();
     float mass_;
     VDir speed_;
     int health_;
