@@ -48,13 +48,11 @@ public:
     {
         return angle_;
     }
-    virtual void Process()
-    {
-        Move(rand() % 3 - 1, rand() % 3 - 1);
-        angle_ += static_cast<float>((rand() % 3) - 1);
-    }
+    virtual void Process();
     void Move(int step_x_, int step_y_);
 private:
+    float mass_;
+    VDir speed_;
     int health_;
     std::string sprite_name_;
     GLSprite* sprite_;

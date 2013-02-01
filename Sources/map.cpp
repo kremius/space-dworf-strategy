@@ -118,8 +118,8 @@ Map::EnemyHolder::EnemyHolder()
     for (int i = 0; i < sizeWmap; ++i)
         for (int j = 0; j < sizeHmap; ++j)
         {
-            //if (rand() % 10)
-            //    continue;
+            if (rand() % 10)
+                continue;
             holder_[i][j].push_back(new Enemy(i * 32, j * 32));
         }
 }

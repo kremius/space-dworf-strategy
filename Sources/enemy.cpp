@@ -1,5 +1,7 @@
 #include "enemy.h"
 
+#include <math.h>
+
 #include "ASpritesClass.h"
 #include "map.h"
 
@@ -8,8 +10,12 @@ Enemy::Enemy(int pixel_x, int pixel_y)
     pixel_y_(pixel_y),
     angle_(0.0f),
     state_h_(0),
-    state_w_(0) 
+    state_w_(0),
+    mass_(0.1f)
     {
+        speed_.x = rand() % 3 - 1;
+        speed_.y = rand() % 3 - 1;
+        speed_.z = 0;
         SetSprite("jew.png", 1, 1);
     }
 
@@ -21,4 +27,44 @@ void Enemy::SetSprite(const std::string& name, int size_w, int size_h)
 {
     sprite_name_ = name;
     sprite_ = GetASpr()->returnSpr(name, size_w, size_h);
+}
+
+void Enemy::Process()
+{
+    // TODO: vectors
+    if (rand() % 3 == 1)
+        Move(speed_.x, speed_.y);
+    int diff_x = 750 - pixel_x();
+    int diff_y = 750 - pixel_y();
+
+    float radius = sqrt(static_cast<float>(diff_x * diff_x + diff_y * diff_y));
+
+    if (radius != 0)
+    {
+            speed_.x += static_cast<int>(3) * (1.0f * diff_x / radius);
+            speed_.y += static_cast<int>(3) * (1.0f * diff_y / radius);
+    }
+
+    speed_.x += rand() % 7 - 3;
+    speed_.y += rand() % 7 - 3;
+
+    if (speed_.x > 0)
+        speed_.x = std::min(speed_.x,  7);
+    else
+        speed_.x = std::max(speed_.x, -7);
+    if (speed_.y > 0)
+        speed_.y = std::min(speed_.y,  7);
+    else
+        speed_.y = std::max(speed_.y, -7);
+
+    if (speed_.x == 0 && speed_.y == 0)
+        ;
+    else
+    {
+        float help_angle = atan(speed_.y / (speed_.x * 1.0f)) * (180.0f / 3.14f);
+        float sum_angle = 0.0f;
+        if (speed_.x < 0)
+            sum_angle = 180.0f;
+        angle_ = sum_angle + help_angle + 90.0f;
+    }
 }
