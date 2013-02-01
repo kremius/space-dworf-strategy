@@ -96,6 +96,8 @@ public:
         click_state_ = !click_state_;
     }
     virtual void Process();
+
+    // TODO: WTF? Rename 
     virtual bool IsLine() const { return true; }
 protected:
     bool click_state_;
@@ -205,16 +207,11 @@ public:
         : Object(posx, posy),
         state_counter_(0)
     {
-        SetSprite("test.png", 4, 1);
+        SetSprite("platform.png", 1, 1);
         energy_per_sec_ = -10;
         max_energy_ = 1500;
     }
-    virtual void Process() override
-    {
-        Object::Process();
-        ++state_counter_;
-        angle_ = static_cast<float>(state_counter_ % 360);
-    }
+    virtual void Process() override;
 private:
     int state_counter_;
 };
