@@ -109,3 +109,13 @@ void Drill::Process()
         energy_per_sec_ = 0;
     }
 }
+
+void Gun::Process()
+{
+    Object::Process();
+    ++state_counter_;
+    angle_ = static_cast<float>(state_counter_ % 360);
+
+    if (rand() % 10 == 1 && click_state())
+        GetMap()->GetEnemyHolder()->Add(new Rocket(posx() * 32, posy() * 32));
+}
