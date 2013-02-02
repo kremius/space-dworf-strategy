@@ -48,6 +48,11 @@ public:
     {
         return angle_;
     }
+    void Push(int x, int y)
+    {
+        speed_.x += x;
+        speed_.y += y;
+    }
     virtual void Process();
     virtual bool IsRocketFriend() const { return false; }
     void Move(int step_x_, int step_y_);

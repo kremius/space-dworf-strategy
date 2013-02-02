@@ -244,11 +244,8 @@ void Map::EnemyHolder::AddToDelete(Enemy* enemy)
     delete_list_.insert(enemy);
 }
 
-Enemy* Map::EnemyHolder::GetNearest(Enemy* enemy, int radius, std::function<bool(Enemy*)> predicate)
+Enemy* Map::EnemyHolder::GetNearest(int x, int y, int radius, std::function<bool(Enemy*)> predicate)
 {
-    int x = enemy->pixel_x();
-    int y = enemy->pixel_y();
-
     int from_posx = std::max(x / 32 - radius, 0);
     int from_posy = std::max(y / 32 - radius, 0);
 
@@ -268,7 +265,7 @@ Enemy* Map::EnemyHolder::GetNearest(Enemy* enemy, int radius, std::function<bool
                 {
                     int new_radius = (*it)->pixel_x() * (*it)->pixel_x()
                                     + (*it)->pixel_y() * (*it)->pixel_y();
-                    if (new_radius < min_radius && *it != enemy)
+                    if (new_radius < min_radius)
                     {
                         min_radius = new_radius;
                         retval = *it;
@@ -278,7 +275,7 @@ Enemy* Map::EnemyHolder::GetNearest(Enemy* enemy, int radius, std::function<bool
             }
         }
     return retval;
-};
+}
 
 Object* Map::GetNearest(int x, int y)
 {

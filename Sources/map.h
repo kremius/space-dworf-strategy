@@ -63,7 +63,7 @@ public:
         bool Add(Enemy* enemy);
         void AddToDelete(Enemy* enemy);
         void AddEnemy();
-        Enemy* GetNearest(Enemy* enemy, int radius = 7, std::function<bool(Enemy*)> predicate = [](Enemy*) {return true;});
+        Enemy* GetNearest(int x, int y, int radius = 7, std::function<bool(Enemy*)> predicate = [](Enemy*) {return true;});
         void Move(Enemy* enemy, int step_x, int step_y);
         void Draw();
         void Process();

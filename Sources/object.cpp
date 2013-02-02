@@ -116,6 +116,23 @@ void Gun::Process()
     ++state_counter_;
     angle_ = static_cast<float>(state_counter_ % 360);
 
-    if (rand() % 10 == 1 && click_state())
-        GetMap()->GetEnemyHolder()->Add(new Rocket(posx() * 32, posy() * 32));
+    auto enm = GetMap()->GetEnemyHolder()->GetNearest(
+                         this->posx() * 32, this->posy() * 32, 7, 
+                         [](Enemy* e) { return !e->IsRocketFriend();});
+
+
+    int diff_x = enm->pixel_x() - posx() * 32;
+    int diff_y = enm->pixel_y() - posy() * 32;
+
+    int x_rot = 100 * cos((angle_ - 90.0) * (3.14f / 180.0f));
+    int y_rot = 100 * sin((angle_ - 90.0) * (3.14f / 180.0f));
+
+    int value = diff_x * x_rot + diff_y * y_rot;
+
+    if (rand() % 4 == 1 && click_state())
+    {
+        auto new_item = new Rocket(posx() * 32 + 16, posy() * 32 + 16);
+        new_item->Push(5 * cos((angle_ - 90.0) * (3.14f / 180.0f)), 5 * sin((angle_ - 90.0) * (3.14f / 180.0f)));
+        GetMap()->GetEnemyHolder()->Add(new_item);
+    }
 }
