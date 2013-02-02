@@ -53,6 +53,10 @@ public:
         speed_.x += x;
         speed_.y += y;
     }
+    int Hit(int value)
+    {
+        return health_ -= value;
+    }
     virtual void Process();
     virtual bool IsRocketFriend() const { return false; }
     void Move(int step_x_, int step_y_);
@@ -85,10 +89,23 @@ public:
     Rocket(int x, int y) : Enemy(x, y) 
     {
         length_ = 0;
-        SetSprite("rocket.png");
+        SetSprite("flame1.png", 4, 1);
+
+        pixel_x_ += rand() % 9 - 4;
+        pixel_y_ += rand() % 9 - 4;
     }
     virtual void Process() override;
     virtual bool IsRocketFriend() const { return true; }
 private:
     int length_;
+};
+
+class Ork: public Enemy
+{
+public:
+    Ork(int x, int y) : Enemy(x, y)
+    {
+        SetSprite("ork.png");
+    }
+    virtual void Process() override;
 };

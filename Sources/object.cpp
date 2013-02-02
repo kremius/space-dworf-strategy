@@ -135,8 +135,11 @@ void Gun::Process()
     }
     if (enm != nullptr)
     {
-        auto new_item = new Rocket(posx() * 32 + 16, posy() * 32 + 16);
-        new_item->Push(5 * cos((angle_ - 90.0) * (3.14f / 180.0f)), 5 * sin((angle_ - 90.0) * (3.14f / 180.0f)));
-        GetMap()->GetEnemyHolder()->Add(new_item);
+        for (int i = 0; i < 5; ++i)
+        {
+            auto new_item = new Rocket(posx() * 32 + 16, posy() * 32 + 16);
+            new_item->Push(5 * cos((angle_ - 90.0) * (3.14f / 180.0f)), 5 * sin((angle_ - 90.0) * (3.14f / 180.0f)));
+            GetMap()->GetEnemyHolder()->Add(new_item);
+        }
     }
 }

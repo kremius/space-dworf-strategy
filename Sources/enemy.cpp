@@ -11,7 +11,8 @@ Enemy::Enemy(int pixel_x, int pixel_y)
     angle_(0.0f),
     state_h_(0),
     state_w_(0),
-    mass_(0.1f)
+    mass_(0.1f),
+    health_(10)
     {
         speed_.x = 0;
         speed_.y = 0;
@@ -123,8 +124,8 @@ void Rocket::Process()
     }
     ProcessMove();
 
-    state_w_ = (state_w_ + 1) % 4;
+    state_w_ = (length_ / 5) % 4;
 
-    if (length_ > 2 * 60)
+    if (length_ > 24)
         GetMap()->GetEnemyHolder()->AddToDelete(this);
 }
