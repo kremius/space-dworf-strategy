@@ -76,6 +76,12 @@ void Enemy::ProcessMove()
     }
 }
 
+void Enemy::ProcessHealth()
+{
+    if (health_ < 0)
+        GetMap()->GetEnemyHolder()->AddToDelete(this);
+}
+
 void Enemy::Process()
 {
     auto obj = GetMap()->GetNearest(pixel_x(), pixel_y());
@@ -101,6 +107,21 @@ void Jew::Process()
         GetPlayer()->ChangeStone(-1);
 }
 
+void Ork::Process()
+{
+    Enemy::Process();
+
+    int posx = pixel_x() / 32;
+    int posy = pixel_y() / 32;
+
+    auto n = (*GetMap())[posx][posy];
+
+    if (n != nullptr && n->IsLine())
+    {
+        n->Hit(1);
+    }
+}
+
 void Rocket::Process()
 {
     auto enm = GetMap()->GetEnemyHolder()->GetNearest(this->pixel_x(), this->pixel_y(), 7, 
@@ -124,8 +145,8 @@ void Rocket::Process()
     }
     ProcessMove();
 
-    state_w_ = (length_ / 5) % 4;
+    state_w_ = (length_ / 7) % 4;
 
-    if (length_ > 24)
+    if (length_ > 25 && rand() % 3)
         GetMap()->GetEnemyHolder()->AddToDelete(this);
 }

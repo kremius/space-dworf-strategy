@@ -128,6 +128,8 @@ void Map::EnemyHolder::AddEnemy()
             if (   i == 0   )//         || j == 0
                 //|| i == sizeWmap - 1 || j == sizeHmap - 1)
                 holder_[i][j].push_back(new Jew(i * 32, j * 32));
+            if (j == 0)
+                holder_[i][j].push_back(new Ork(i * 32, j * 32));
         }
 }
 
@@ -265,8 +267,10 @@ Enemy* Map::EnemyHolder::GetNearest(int x, int y, int radius, std::function<bool
             {
                 if (predicate(*it))
                 {
-                    int new_radius = (*it)->pixel_x() * (*it)->pixel_x()
-                                    + (*it)->pixel_y() * (*it)->pixel_y();
+                    int diff_x = (*it)->pixel_x() - x;
+                    int diff_y = (*it)->pixel_y() - y;
+                    int new_radius = diff_x * diff_x
+                                   + diff_y * diff_y;
                     if (new_radius < min_radius)
                     {
                         min_radius = new_radius;
@@ -303,4 +307,15 @@ Object* Map::GetNearest(int x, int y)
     });
 
     return nearest_object;
+}
+
+void Map::Collect()
+{
+    for (auto it = delete_list_.begin(); it != delete_list_.end(); ++it)
+    {
+        holder_[(*it)->posx()][(*it)->posy()] = nullptr;
+        delete *it;
+    }
+
+    delete_list_.clear();
 }

@@ -148,6 +148,9 @@ int main(int argc, char* argv[])
                 return;
             obj->Process();
         });
+
+        GetMap()->Collect();
+
         GetMap()->GetEnemyHolder()->Process();
         GetPlayer()->SetEnergy(0);
         GetMap()->ForEach([](Object* obj)

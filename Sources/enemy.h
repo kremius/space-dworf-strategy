@@ -61,6 +61,7 @@ public:
     virtual bool IsRocketFriend() const { return false; }
     void Move(int step_x_, int step_y_);
 protected:
+    void ProcessHealth();
     void ProcessSpeed(int pixel_x, int pixel_y, int force = 3);
     void ProcessMove();
     float mass_;

@@ -29,6 +29,10 @@ void Object::Process()
         }
     }, posx(), posy(), 3);
 
+    if (health_ < 0)
+    {
+        GetMap()->AddToDelete(this);
+    }
 };
 
 void Producer::Process()
@@ -115,7 +119,7 @@ void Gun::Process()
     Object::Process();
 
     auto enm = GetMap()->GetEnemyHolder()->GetNearest(
-                         this->posx() * 32, this->posy() * 32, 20, 
+                         this->posx() * 32 + 16, this->posy() * 32 + 16, 20, 
                          [](Enemy* e) { return !e->IsRocketFriend();});
 
     if (enm != nullptr)

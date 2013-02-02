@@ -74,6 +74,14 @@ public:
 
     Map();
     Object* GetNearest(int x, int y);
+
+    void AddToDelete(Object* obj)
+    {
+        delete_list_.insert(obj);
+    }
+
+    void Collect();
+
     InsideType& operator[](size_t number)
     {
         return holder_[number];
@@ -89,6 +97,7 @@ public:
 private:
     EnemyHolder enemy_holder_;
 
+    std::set<Object*> delete_list_;
     std::array<InsideType, sizeWmap> holder_;
 };
 
