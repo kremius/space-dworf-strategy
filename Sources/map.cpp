@@ -123,9 +123,11 @@ void Map::EnemyHolder::AddEnemy()
     for (int i = 0; i < sizeWmap; ++i)
         for (int j = 0; j < sizeHmap; ++j)
         {
-            if (rand() % 100)
+            if (rand() % 3)
                 continue;
-            holder_[i][j].push_back(new Jew(i * 32, j * 32));
+            if (   i == 0   )//         || j == 0
+                //|| i == sizeWmap - 1 || j == sizeHmap - 1)
+                holder_[i][j].push_back(new Jew(i * 32, j * 32));
         }
 }
 

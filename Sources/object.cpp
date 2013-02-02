@@ -113,23 +113,27 @@ void Drill::Process()
 void Gun::Process()
 {
     Object::Process();
-    ++state_counter_;
-    angle_ = static_cast<float>(state_counter_ % 360);
 
     auto enm = GetMap()->GetEnemyHolder()->GetNearest(
-                         this->posx() * 32, this->posy() * 32, 7, 
+                         this->posx() * 32, this->posy() * 32, 20, 
                          [](Enemy* e) { return !e->IsRocketFriend();});
 
+    if (enm != nullptr)
+    {
+        int diff_x = enm->pixel_x() - posx() * 32;
+        int diff_y = enm->pixel_y() - posy() * 32;
 
-    int diff_x = enm->pixel_x() - posx() * 32;
-    int diff_y = enm->pixel_y() - posy() * 32;
+        float angle_rad = (angle_ - 90.0) * (3.14f / 180.0f);
 
-    int x_rot = 100 * cos((angle_ - 90.0) * (3.14f / 180.0f));
-    int y_rot = 100 * sin((angle_ - 90.0) * (3.14f / 180.0f));
+        int x = 100 * cos(angle_rad);
+        int y = 100 * sin(angle_rad);
 
-    int value = diff_x * x_rot + diff_y * y_rot;
-
-    if (rand() % 4 == 1 && click_state())
+        if ((diff_x * y - diff_y * x) > 0)
+            angle_ -= 4.0 + rand() % 32;
+        else
+            angle_ += 4.0 + rand() % 32;
+    }
+    if (enm != nullptr)
     {
         auto new_item = new Rocket(posx() * 32 + 16, posy() * 32 + 16);
         new_item->Push(5 * cos((angle_ - 90.0) * (3.14f / 180.0f)), 5 * sin((angle_ - 90.0) * (3.14f / 180.0f)));

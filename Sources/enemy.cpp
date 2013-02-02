@@ -45,8 +45,8 @@ void Enemy::ProcessSpeed(int pixel_x_to, int pixel_y_to, int force)
             speed_.y += static_cast<int>((force) * (1.0f * diff_y / radius));
     }
 
-    speed_.x += rand() % 3 - 1;
-    speed_.y += rand() % 3 - 1;
+   // speed_.x += rand() % 2 - 1;
+   // speed_.y += rand() % 2 - 1;
 
     if (speed_.x > 0)
         speed_.x = std::min(speed_.x,  5);
@@ -114,7 +114,7 @@ void Rocket::Process()
     if (enm != nullptr)
     {
         ProcessSpeed(enm->pixel_x(), enm->pixel_y(), 1);
-        if ((abs(enm->pixel_x() - pixel_x()) + abs(enm->pixel_y() - pixel_y())) < 32)
+        if ((abs(enm->pixel_x() - pixel_x()) + abs(enm->pixel_y() - pixel_y())) < 48)
         {
             GetMap()->GetEnemyHolder()->AddToDelete(enm);
             GetMap()->GetEnemyHolder()->AddToDelete(this);
