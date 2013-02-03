@@ -90,7 +90,7 @@ public:
     Rocket(int x, int y) : Enemy(x, y) 
     {
         length_ = 0;
-        SetSprite("flame1.png", 4, 1);
+        SetSprite("flame1.png", 6, 1);
 
         pixel_x_ += rand() % 9 - 4;
         pixel_y_ += rand() % 9 - 4;

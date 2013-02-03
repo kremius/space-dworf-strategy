@@ -146,8 +146,8 @@ void Rocket::Process()
     }
     ProcessMove();
 
-    state_w_ = (length_ / 7) % 4;
+    state_w_ = (length_ / 5) % 6;
 
-    if (length_ > 25 && rand() % 3)
+    if (length_ > 30)
         GetMap()->GetEnemyHolder()->AddToDelete(this);
 }
