@@ -63,6 +63,9 @@
     <ClCompile Include="Sources\EffectSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\DeathEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sources\camera.h">
@@ -102,6 +105,9 @@
       <Filter>Header Files\Visual</Filter>
     </ClInclude>
     <ClInclude Include="Sources\EffectSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\DeathEffect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -52,9 +52,6 @@ int main(int argc, char* argv[])
     Player player;
     helpers::InitPlayer(&player);
 
-    FabricProcesser* fb = new FabricProcesser;
-    helpers::InitFabricProcesser(fb);
-
     TextPainter texter;
     texter["Stone"].SetUpdater([&](std::string* str)
     {
@@ -151,6 +148,7 @@ int main(int argc, char* argv[])
             
         glClear(GL_COLOR_BUFFER_BIT);
         
+        GetFabricProcesser()->process();
         GetMap()->Draw();
         GetMap()->ForEach([](Object* obj)
         {

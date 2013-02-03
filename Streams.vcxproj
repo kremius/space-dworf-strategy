@@ -16,6 +16,7 @@
     <ClCompile Include="Sources\Audio.cpp" />
     <ClCompile Include="Sources\camera.cpp" />
     <ClCompile Include="Sources\constcpp.cpp" />
+    <ClCompile Include="Sources\DeathEffect.cpp" />
     <ClCompile Include="Sources\EffectSystem.cpp" />
     <ClCompile Include="Sources\enemy.cpp" />
     <ClCompile Include="Sources\GLSprite.cpp" />
@@ -32,6 +33,7 @@
     <ClInclude Include="Sources\Audio.h" />
     <ClInclude Include="Sources\camera.h" />
     <ClInclude Include="Sources\constheader.h" />
+    <ClInclude Include="Sources\DeathEffect.h" />
     <ClInclude Include="Sources\EffectSystem.h" />
     <ClInclude Include="Sources\enemy.h" />
     <ClInclude Include="Sources\GLSprite.h" />

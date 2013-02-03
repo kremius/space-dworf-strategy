@@ -64,6 +64,7 @@ protected:
     void ProcessHealth();
     void ProcessSpeed(int pixel_x, int pixel_y, int force = 3);
     void ProcessMove();
+    virtual void OnDeath() {};
     float mass_;
     VDir speed_;
     int health_;
@@ -76,7 +77,7 @@ protected:
     float angle_;
 };
 
-// Its just joke, srsly
+// Its just joke, srsly (or not?)
 class Jew: public Enemy
 {
 public:

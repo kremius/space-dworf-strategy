@@ -3,6 +3,8 @@
 #include <math.h>
 
 #include "ASpritesClass.h"
+#include "DeathEffect.h"
+#include "EffectSystem.h"
 #include "map.h"
 
 Enemy::Enemy(int pixel_x, int pixel_y)
@@ -79,7 +81,10 @@ void Enemy::ProcessMove()
 void Enemy::ProcessHealth()
 {
     if (health_ < 0)
+    {
         GetMap()->GetEnemyHolder()->AddToDelete(this);
+        getEffectOf<RedBlood>()->SetPos(pixel_x(), pixel_y(), angle())->Start();
+    }
 }
 
 void Enemy::Process()

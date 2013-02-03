@@ -127,22 +127,23 @@ void Gun::Process()
         int diff_x = enm->pixel_x() - posx() * 32;
         int diff_y = enm->pixel_y() - posy() * 32;
 
-        float angle_rad = (angle_ - 90.0) * (3.14f / 180.0f);
+        float angle_rad = (angle_ - 90.0f) * (3.14f / 180.0f);
 
-        int x = 100 * cos(angle_rad);
-        int y = 100 * sin(angle_rad);
+        int x = static_cast<int>(100 * cos(angle_rad));
+        int y = static_cast<int>(100 * sin(angle_rad));
 
         if ((diff_x * y - diff_y * x) > 0)
-            angle_ -= 4.0 + rand() % 32;
+            angle_ -= 4.0f + rand() % 32;
         else
-            angle_ += 4.0 + rand() % 32;
+            angle_ += 4.0f + rand() % 32;
     }
     if (enm != nullptr)
     {
         for (int i = 0; i < 3; ++i)
         {
             auto new_item = new Rocket(posx() * 32 + 16, posy() * 32 + 16);
-            new_item->Push(5 * cos((angle_ - 90.0) * (3.14f / 180.0f)), 5 * sin((angle_ - 90.0) * (3.14f / 180.0f)));
+            new_item->Push(static_cast<int>(5 * cos((angle_ - 90.0f) * (3.14f / 180.0f))),
+                           static_cast<int>(5 * sin((angle_ - 90.0f) * (3.14f / 180.0f))));
             GetMap()->GetEnemyHolder()->Add(new_item);
         }
     }

@@ -29,18 +29,16 @@ public:
     }
     void process()
     {
-        for (int i = fabrics_.size() - 1; i >= 0; --i)
-            fabrics_[i]->process();
+        for (auto it = fabrics_.begin(); it != fabrics_.end(); ++it)
+            (*it)->process();
     }
 private:
     std::vector<IFabric*> fabrics_;
 };
 
-FabricProcesser* GetFabricProcesser();
-
-namespace helpers
+inline FabricProcesser* GetFabricProcesser()
 {
-    void InitFabricProcesser(FabricProcesser* fb);
+    return FabricProcesser::Get();
 }
 
 template<typename TEffect>
