@@ -67,7 +67,12 @@ public:
         void Move(Enemy* enemy, int step_x, int step_y);
         void Draw();
         void Process();
+        int GetEnemyAmount() const
+        {
+            return enemy_amount_;
+        }
     private:
+        int enemy_amount_;
         std::set<Enemy*> delete_list_;
         std::array<InsideType, sizeWmap> holder_;
     };

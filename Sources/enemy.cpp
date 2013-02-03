@@ -88,6 +88,7 @@ void Enemy::Process()
     if (obj != nullptr)
         ProcessSpeed(obj->posx() * 32, obj->posy() * 32);
     ProcessMove();
+    ProcessHealth();
 }
 void Jew::Process()
 {
@@ -138,9 +139,9 @@ void Rocket::Process()
         ProcessSpeed(enm->pixel_x(), enm->pixel_y(), 1);
         if ((abs(enm->pixel_x() - pixel_x()) + abs(enm->pixel_y() - pixel_y())) < 48)
         {
-            GetMap()->GetEnemyHolder()->AddToDelete(enm);
-            GetMap()->GetEnemyHolder()->AddToDelete(this);
-            return;
+            //GetMap()->GetEnemyHolder()->AddToDelete(enm);
+            //GetMap()->GetEnemyHolder()->AddToDelete(this);
+            enm->Hit(1);
         }
     }
     ProcessMove();

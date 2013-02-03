@@ -115,7 +115,7 @@ void Map::ForEach(std::function<void(Object*)> callback,
 
 Map::EnemyHolder::EnemyHolder()
 {
-
+    enemy_amount_ = 0;
 }
 
 void Map::EnemyHolder::AddEnemy()
@@ -156,18 +156,34 @@ void Map::EnemyHolder::Draw()
 
 void Map::EnemyHolder::Process()
 {
+    enemy_amount_ = 0;
     for (int i = 0; i < sizeWmap; ++i)
         for (int j = 0; j < sizeHmap; ++j)
         {
             auto it = holder_[i][j].begin();
             while (it != holder_[i][j].end())
             {
+                if (!(*it)->IsRocketFriend())
+                    ++enemy_amount_;
                 (*(it++))->Process();
+            }
+        }
+
+    for (int i = 0; i < sizeWmap; ++i)
+        for (int j = 0; j < sizeHmap; ++j)
+        {
+            auto it = holder_[i][j].begin();
+            while (it != holder_[i][j].end())
+            {
+                if (!(*it++)->IsRocketFriend())
+                    ++enemy_amount_;
             }
         }
 
      for (auto it = delete_list_.begin(); it != delete_list_.end(); ++it)
      {
+        // if (!(*it)->IsRocketFriend())
+        //    --enemy_amount_;
          Remove(*it);
          delete *it;
      }

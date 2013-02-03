@@ -66,7 +66,13 @@ int main(int argc, char* argv[])
         str->clear();
         *str = conv.str();
     }).SetColor(250, 250, 30).SetFreq(10).SetPlace(300, 0).SetSize(16);
-
+    texter["Enemy"].SetUpdater([&](std::string* str)
+    {
+        std::stringstream conv;
+        conv << "Enemies: " << GetMap()->GetEnemyHolder()->GetEnemyAmount();
+        str->clear();
+        *str = conv.str();
+    }).SetColor(0, 20, 230).SetFreq(10).SetPlace(300, 30).SetSize(16);
     while(true)
     {
         bool check_new = false;
