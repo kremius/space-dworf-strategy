@@ -13,6 +13,7 @@
 
 #include "Audio.h"
 #include "ASpritesClass.h"
+#include "EffectSystem.h"
 #include "Screen.h"
 #include "Text.h"
 
@@ -50,6 +51,9 @@ int main(int argc, char* argv[])
 
     Player player;
     helpers::InitPlayer(&player);
+
+    FabricProcesser* fb = new FabricProcesser;
+    helpers::InitFabricProcesser(fb);
 
     TextPainter texter;
     texter["Stone"].SetUpdater([&](std::string* str)
