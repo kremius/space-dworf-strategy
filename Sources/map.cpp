@@ -115,7 +115,8 @@ void Map::ForEach(std::function<void(Object*)> callback,
 
 Map::EnemyHolder::EnemyHolder()
 {
-
+    enemy_amount_ = 0;
+    counter_ = 0;
 }
 
 void Map::EnemyHolder::AddEnemy()
@@ -123,9 +124,13 @@ void Map::EnemyHolder::AddEnemy()
     for (int i = 0; i < sizeWmap; ++i)
         for (int j = 0; j < sizeHmap; ++j)
         {
-            if (rand() % 100)
-                continue;
-            holder_[i][j].push_back(new Jew(i * 32, j * 32));
+            if ( rand() % 40 == 1 &&  (i == 0 || j == 0 || i == sizeWmap - 1 || j == sizeHmap - 1))
+            {
+                if (rand() % 2)
+                    holder_[i][j].push_back(new Jew(i * 32, j * 32));
+                else
+                    holder_[i][j].push_back(new Ork(i * 32, j * 32));
+            }
         }
 }
 
@@ -152,24 +157,59 @@ void Map::EnemyHolder::Draw()
 
 void Map::EnemyHolder::Process()
 {
+    enemy_amount_ = 0;
     for (int i = 0; i < sizeWmap; ++i)
         for (int j = 0; j < sizeHmap; ++j)
         {
             auto it = holder_[i][j].begin();
             while (it != holder_[i][j].end())
             {
+                if (!(*it)->IsRocketFriend())
+                    ++enemy_amount_;
                 (*(it++))->Process();
+            }
+        }
+
+    for (int i = 0; i < sizeWmap; ++i)
+        for (int j = 0; j < sizeHmap; ++j)
+        {
+            auto it = holder_[i][j].begin();
+            while (it != holder_[i][j].end())
+            {
+                if (!(*it++)->IsRocketFriend())
+                    ++enemy_amount_;
             }
         }
 
      for (auto it = delete_list_.begin(); it != delete_list_.end(); ++it)
      {
+        // if (!(*it)->IsRocketFriend())
+        //    --enemy_amount_;
          Remove(*it);
          delete *it;
      }
 
      delete_list_.erase(delete_list_.begin(), delete_list_.end());
-};
+
+     ProcessWave();
+}
+
+void Map::EnemyHolder::ProcessWave()
+{
+    if (GetEnemyAmount() == 0)
+        ++counter_;
+    if (counter_ % 5000 == 0)
+    {
+        for (int i = 0; i < 3 * (counter_ / 5000); ++i)
+            AddEnemy();
+        ++counter_;
+    }
+}
+
+int Map::EnemyHolder::GetTimeBeforeWave() const
+{
+    return 5000 + ((counter_ / 5000) * 5000 - counter_);
+}
 
 void Map::EnemyHolder::Move(Enemy* enemy, int step_x, int step_y)
 {
@@ -244,11 +284,8 @@ void Map::EnemyHolder::AddToDelete(Enemy* enemy)
     delete_list_.insert(enemy);
 }
 
-Enemy* Map::EnemyHolder::GetNearest(Enemy* enemy, int radius, std::function<bool(Enemy*)> predicate)
+Enemy* Map::EnemyHolder::GetNearest(int x, int y, int radius, std::function<bool(Enemy*)> predicate)
 {
-    int x = enemy->pixel_x();
-    int y = enemy->pixel_y();
-
     int from_posx = std::max(x / 32 - radius, 0);
     int from_posy = std::max(y / 32 - radius, 0);
 
@@ -266,9 +303,11 @@ Enemy* Map::EnemyHolder::GetNearest(Enemy* enemy, int radius, std::function<bool
             {
                 if (predicate(*it))
                 {
-                    int new_radius = (*it)->pixel_x() * (*it)->pixel_x()
-                                    + (*it)->pixel_y() * (*it)->pixel_y();
-                    if (new_radius < min_radius && *it != enemy)
+                    int diff_x = (*it)->pixel_x() - x;
+                    int diff_y = (*it)->pixel_y() - y;
+                    int new_radius = diff_x * diff_x
+                                   + diff_y * diff_y;
+                    if (new_radius < min_radius)
                     {
                         min_radius = new_radius;
                         retval = *it;
@@ -278,7 +317,7 @@ Enemy* Map::EnemyHolder::GetNearest(Enemy* enemy, int radius, std::function<bool
             }
         }
     return retval;
-};
+}
 
 Object* Map::GetNearest(int x, int y)
 {
@@ -304,4 +343,15 @@ Object* Map::GetNearest(int x, int y)
     });
 
     return nearest_object;
+}
+
+void Map::Collect()
+{
+    for (auto it = delete_list_.begin(); it != delete_list_.end(); ++it)
+    {
+        holder_[(*it)->posx()][(*it)->posy()] = nullptr;
+        delete *it;
+    }
+
+    delete_list_.clear();
 }

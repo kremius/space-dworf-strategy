@@ -19,6 +19,7 @@ public:
         stone_amount_(0),
         max_energy_(0),
         click_state_(false),
+        health_(10),
         angle_(0) 
         {
             SetSprite("circle.png");
@@ -95,11 +96,19 @@ public:
     {
         click_state_ = !click_state_;
     }
+
+    void Hit(int value)
+    {
+        health_ -= value;
+    }
+
     virtual void Process();
 
     // TODO: WTF? Rename 
     virtual bool IsLine() const { return true; }
 protected:
+    int health_;
+
     bool click_state_;
 
     int state_h_;
@@ -209,7 +218,7 @@ public:
     {
         SetSprite("platform.png", 1, 1);
         energy_per_sec_ = -10;
-        max_energy_ = 1500;
+        max_energy_ = 100;
     }
     virtual void Process() override;
 private:

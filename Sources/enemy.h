@@ -48,12 +48,23 @@ public:
     {
         return angle_;
     }
+    void Push(int x, int y)
+    {
+        speed_.x += x;
+        speed_.y += y;
+    }
+    int Hit(int value)
+    {
+        return health_ -= value;
+    }
     virtual void Process();
     virtual bool IsRocketFriend() const { return false; }
     void Move(int step_x_, int step_y_);
 protected:
+    void ProcessHealth();
     void ProcessSpeed(int pixel_x, int pixel_y, int force = 3);
     void ProcessMove();
+    virtual void OnDeath() {};
     float mass_;
     VDir speed_;
     int health_;
@@ -66,7 +77,7 @@ protected:
     float angle_;
 };
 
-// Its just joke, srsly
+// Its just joke, srsly (or not?)
 class Jew: public Enemy
 {
 public:
@@ -80,10 +91,23 @@ public:
     Rocket(int x, int y) : Enemy(x, y) 
     {
         length_ = 0;
-        SetSprite("rocket.png");
+        SetSprite("flame1.png", 6, 1);
+
+        pixel_x_ += rand() % 9 - 4;
+        pixel_y_ += rand() % 9 - 4;
     }
     virtual void Process() override;
     virtual bool IsRocketFriend() const { return true; }
 private:
     int length_;
+};
+
+class Ork: public Enemy
+{
+public:
+    Ork(int x, int y) : Enemy(x, y)
+    {
+        SetSprite("ork.png");
+    }
+    virtual void Process() override;
 };
