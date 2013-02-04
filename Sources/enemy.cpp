@@ -3,6 +3,8 @@
 #include <math.h>
 
 #include "ASpritesClass.h"
+#include "DeathEffect.h"
+#include "EffectSystem.h"
 #include "map.h"
 
 Enemy::Enemy(int pixel_x, int pixel_y)
@@ -11,10 +13,11 @@ Enemy::Enemy(int pixel_x, int pixel_y)
     angle_(0.0f),
     state_h_(0),
     state_w_(0),
-    mass_(0.1f)
+    mass_(0.1f),
+    health_(10)
     {
-        speed_.x = rand() % 3 - 1;
-        speed_.y = rand() % 3 - 1;
+        speed_.x = 0;
+        speed_.y = 0;
         speed_.z = 0;
         SetSprite("jew.png", 1, 1);
     }
@@ -45,8 +48,8 @@ void Enemy::ProcessSpeed(int pixel_x_to, int pixel_y_to, int force)
             speed_.y += static_cast<int>((force) * (1.0f * diff_y / radius));
     }
 
-    speed_.x += rand() % 15 - 7;
-    speed_.y += rand() % 15 - 7;
+   // speed_.x += rand() % 2 - 1;
+   // speed_.y += rand() % 2 - 1;
 
     if (speed_.x > 0)
         speed_.x = std::min(speed_.x,  5);
@@ -75,12 +78,22 @@ void Enemy::ProcessMove()
     }
 }
 
+void Enemy::ProcessHealth()
+{
+    if (health_ < 0)
+    {
+        GetMap()->GetEnemyHolder()->AddToDelete(this);
+        getEffectOf<RedBlood>()->SetPos(pixel_x(), pixel_y(), angle())->Start();
+    }
+}
+
 void Enemy::Process()
 {
     auto obj = GetMap()->GetNearest(pixel_x(), pixel_y());
     if (obj != nullptr)
         ProcessSpeed(obj->posx() * 32, obj->posy() * 32);
     ProcessMove();
+    ProcessHealth();
 }
 void Jew::Process()
 {
@@ -100,28 +113,46 @@ void Jew::Process()
         GetPlayer()->ChangeStone(-1);
 }
 
+void Ork::Process()
+{
+    Enemy::Process();
+
+    int posx = pixel_x() / 32;
+    int posy = pixel_y() / 32;
+
+    auto n = (*GetMap())[posx][posy];
+
+    if (n != nullptr && n->IsLine())
+    {
+        n->Hit(1);
+    }
+}
+
 void Rocket::Process()
 {
-    auto enm = GetMap()->GetEnemyHolder()->GetNearest(this, 7, [](Enemy* e) { return !e->IsRocketFriend();});
+    auto enm = GetMap()->GetEnemyHolder()->GetNearest(this->pixel_x(), this->pixel_y(), 7, 
+                                                     [this](Enemy* e) 
+        /*I AM KING OF SPACES*/                      {
+                                                         return !e->IsRocketFriend()
+                                                                && e != this;
+                                                     });
 
     ++length_;
 
     if (enm != nullptr)
     {
-        ProcessSpeed(enm->pixel_x(), enm->pixel_y(), 5);
-        if ((abs(enm->pixel_x() - pixel_x()) + abs(enm->pixel_y() - pixel_y())) < 32)
+        ProcessSpeed(enm->pixel_x(), enm->pixel_y(), 1);
+        if ((abs(enm->pixel_x() - pixel_x()) + abs(enm->pixel_y() - pixel_y())) < 48)
         {
-            GetMap()->GetEnemyHolder()->AddToDelete(enm);
-            GetMap()->GetEnemyHolder()->AddToDelete(this);
-            return;
+            //GetMap()->GetEnemyHolder()->AddToDelete(enm);
+            //GetMap()->GetEnemyHolder()->AddToDelete(this);
+            enm->Hit(1);
         }
     }
-    speed_.x += rand() % 3 - 1;
-    speed_.y += rand() % 3 - 1;
     ProcessMove();
 
-    state_w_ = (state_w_ + 1) % 4;
+    state_w_ = (length_ / 5) % 6;
 
-    if (length_ > 2 * 60)
+    if (length_ > 30)
         GetMap()->GetEnemyHolder()->AddToDelete(this);
 }

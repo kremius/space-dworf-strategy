@@ -14,7 +14,7 @@ class Player
 {
 public:
     Player() 
-        : stone_amount_(30000),
+        : stone_amount_(60000),
           energy_amount_(0) {}
     int stone_amount() const
     {
@@ -63,17 +63,34 @@ public:
         bool Add(Enemy* enemy);
         void AddToDelete(Enemy* enemy);
         void AddEnemy();
-        Enemy* GetNearest(Enemy* enemy, int radius = 7, std::function<bool(Enemy*)> predicate = [](Enemy*) {return true;});
+        Enemy* GetNearest(int x, int y, int radius = 7, std::function<bool(Enemy*)> predicate = [](Enemy*) {return true;});
         void Move(Enemy* enemy, int step_x, int step_y);
         void Draw();
         void Process();
+        int GetTimeBeforeWave() const;
+        void ProcessWave();
+        int GetEnemyAmount() const
+        {
+            return enemy_amount_;
+        }
+
     private:
+        int counter_;
+        int enemy_amount_;
         std::set<Enemy*> delete_list_;
         std::array<InsideType, sizeWmap> holder_;
     };
 
     Map();
     Object* GetNearest(int x, int y);
+
+    void AddToDelete(Object* obj)
+    {
+        delete_list_.insert(obj);
+    }
+
+    void Collect();
+
     InsideType& operator[](size_t number)
     {
         return holder_[number];
@@ -89,6 +106,7 @@ public:
 private:
     EnemyHolder enemy_holder_;
 
+    std::set<Object*> delete_list_;
     std::array<InsideType, sizeWmap> holder_;
 };
 

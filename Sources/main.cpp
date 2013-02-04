@@ -13,6 +13,7 @@
 
 #include "Audio.h"
 #include "ASpritesClass.h"
+#include "EffectSystem.h"
 #include "Screen.h"
 #include "Text.h"
 
@@ -65,8 +66,21 @@ int main(int argc, char* argv[])
         conv << "Energy: " << player.energy_amount();
         str->clear();
         *str = conv.str();
-    }).SetColor(250, 250, 30).SetFreq(10).SetPlace(300, 0).SetSize(16);
-
+    }).SetColor(250, 250, 30).SetFreq(10).SetPlace(320, 0).SetSize(16);
+    texter["Enemy"].SetUpdater([&](std::string* str)
+    {
+        std::stringstream conv;
+        conv << "Enemies: " << GetMap()->GetEnemyHolder()->GetEnemyAmount();
+        str->clear();
+        *str = conv.str();
+    }).SetColor(0, 20, 230).SetFreq(10).SetPlace(320, 30).SetSize(16);
+    texter["WaveTime"].SetUpdater([&](std::string* str)
+    {
+        std::stringstream conv;
+        conv << "Wave time: " << GetMap()->GetEnemyHolder()->GetTimeBeforeWave();
+        str->clear();
+        *str = conv.str();
+    }).SetColor(230, 20, 230).SetFreq(10).SetPlace(0, 30).SetSize(16);
     while(true)
     {
         bool check_new = false;
@@ -100,7 +114,7 @@ int main(int argc, char* argv[])
                 else
                     click = true;
             }
-            else if (event.type == SDL_KEYUP)
+            else if (event.type == SDL_KEYDOWN)
             {
                 if (event.key.keysym.sym == SDLK_j)
                     GetMap()->GetEnemyHolder()->AddEnemy();
@@ -128,7 +142,7 @@ int main(int argc, char* argv[])
             (*GetMap())[new_x][new_y] = new Keeper(new_x, new_y);
         if (keys[SDLK_4] && check_new && GetPlayer()->ChangeStone(-4000))
             (*GetMap())[new_x][new_y] = new Drill(new_x, new_y);
-        if (keys[SDLK_6] && check_new && GetPlayer()->ChangeStone(-1000))
+        if (keys[SDLK_6] && check_new && GetPlayer()->ChangeStone(-3000))
             (*GetMap())[new_x][new_y] = new Gun(new_x, new_y);
         if (click)
             if (keys[SDLK_5] && GetPlayer()->ChangeStone(1000))
@@ -138,9 +152,11 @@ int main(int argc, char* argv[])
             }
             else
                 (*GetMap())[new_x][new_y]->Click();
-            
+        // if (keys[SDLK_j])
+        //       GetMap()->GetEnemyHolder()->AddEnemy();
         glClear(GL_COLOR_BUFFER_BIT);
         
+        GetFabricProcesser()->process();
         GetMap()->Draw();
         GetMap()->ForEach([](Object* obj)
         {
@@ -148,6 +164,9 @@ int main(int argc, char* argv[])
                 return;
             obj->Process();
         });
+
+        GetMap()->Collect();
+
         GetMap()->GetEnemyHolder()->Process();
         GetPlayer()->SetEnergy(0);
         GetMap()->ForEach([](Object* obj)
