@@ -14,7 +14,7 @@ class Player
 {
 public:
     Player() 
-        : stone_amount_(30000),
+        : stone_amount_(60000),
           energy_amount_(0) {}
     int stone_amount() const
     {
@@ -67,11 +67,15 @@ public:
         void Move(Enemy* enemy, int step_x, int step_y);
         void Draw();
         void Process();
+        int GetTimeBeforeWave() const;
+        void ProcessWave();
         int GetEnemyAmount() const
         {
             return enemy_amount_;
         }
+
     private:
+        int counter_;
         int enemy_amount_;
         std::set<Enemy*> delete_list_;
         std::array<InsideType, sizeWmap> holder_;

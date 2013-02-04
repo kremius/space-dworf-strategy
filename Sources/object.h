@@ -218,7 +218,7 @@ public:
     {
         SetSprite("platform.png", 1, 1);
         energy_per_sec_ = -10;
-        max_energy_ = 1500;
+        max_energy_ = 100;
     }
     virtual void Process() override;
 private:

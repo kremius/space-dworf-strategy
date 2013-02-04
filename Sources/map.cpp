@@ -116,6 +116,7 @@ void Map::ForEach(std::function<void(Object*)> callback,
 Map::EnemyHolder::EnemyHolder()
 {
     enemy_amount_ = 0;
+    counter_ = 0;
 }
 
 void Map::EnemyHolder::AddEnemy()
@@ -123,13 +124,13 @@ void Map::EnemyHolder::AddEnemy()
     for (int i = 0; i < sizeWmap; ++i)
         for (int j = 0; j < sizeHmap; ++j)
         {
-            if (rand() % 3)
-                continue;
-            if (   i == 0   )//         || j == 0
-                //|| i == sizeWmap - 1 || j == sizeHmap - 1)
-                holder_[i][j].push_back(new Jew(i * 32, j * 32));
-            if (j == 0)
-                holder_[i][j].push_back(new Ork(i * 32, j * 32));
+            if ( rand() % 40 == 1 &&  (i == 0 || j == 0 || i == sizeWmap - 1 || j == sizeHmap - 1))
+            {
+                if (rand() % 2)
+                    holder_[i][j].push_back(new Jew(i * 32, j * 32));
+                else
+                    holder_[i][j].push_back(new Ork(i * 32, j * 32));
+            }
         }
 }
 
@@ -189,7 +190,26 @@ void Map::EnemyHolder::Process()
      }
 
      delete_list_.erase(delete_list_.begin(), delete_list_.end());
-};
+
+     ProcessWave();
+}
+
+void Map::EnemyHolder::ProcessWave()
+{
+    if (GetEnemyAmount() == 0)
+        ++counter_;
+    if (counter_ % 5000 == 0)
+    {
+        for (int i = 0; i < 3 * (counter_ / 5000); ++i)
+            AddEnemy();
+        ++counter_;
+    }
+}
+
+int Map::EnemyHolder::GetTimeBeforeWave() const
+{
+    return 5000 + ((counter_ / 5000) * 5000 - counter_);
+}
 
 void Map::EnemyHolder::Move(Enemy* enemy, int step_x, int step_y)
 {
