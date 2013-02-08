@@ -128,6 +128,33 @@ void Ork::Process()
     }
 }
 
+void Fire::Process()
+{
+    auto enm = GetMap()->GetEnemyHolder()->GetNearest(this->pixel_x(), this->pixel_y(), 7, 
+                                                     [this](Enemy* e) 
+        /*I AM KING OF SPACES*/                      {
+                                                         return !e->IsRocketFriend()
+                                                                && e != this;
+                                                     });
+
+    ++length_;
+
+    if (enm != nullptr)
+    {
+        ProcessSpeed(enm->pixel_x(), enm->pixel_y(), 1);
+        if ((abs(enm->pixel_x() - pixel_x()) + abs(enm->pixel_y() - pixel_y())) < 48)
+        {
+            enm->Hit(1);
+        }
+    }
+    ProcessMove();
+
+    state_w_ = (length_ / 5) % 6;
+
+    if (length_ > 30)
+        GetMap()->GetEnemyHolder()->AddToDelete(this);
+}
+
 void Rocket::Process()
 {
     auto enm = GetMap()->GetEnemyHolder()->GetNearest(this->pixel_x(), this->pixel_y(), 7, 
@@ -144,15 +171,18 @@ void Rocket::Process()
         ProcessSpeed(enm->pixel_x(), enm->pixel_y(), 1);
         if ((abs(enm->pixel_x() - pixel_x()) + abs(enm->pixel_y() - pixel_y())) < 48)
         {
-            //GetMap()->GetEnemyHolder()->AddToDelete(enm);
-            //GetMap()->GetEnemyHolder()->AddToDelete(this);
-            enm->Hit(1);
+            GetMap()->GetEnemyHolder()->AddToDelete(this);
+            getEffectOf<Explosion>()->SetPos(pixel_x(), pixel_y(), angle())->Start();
+            enm->Hit(10);
         }
     }
     ProcessMove();
 
-    state_w_ = (length_ / 5) % 6;
+    state_w_ = (length_ / 2) % 4;
 
-    if (length_ > 30)
+    if (length_ > 80)
+    {
         GetMap()->GetEnemyHolder()->AddToDelete(this);
+        getEffectOf<Explosion>()->SetPos(pixel_x(), pixel_y(), angle())->Start();
+    }
 }

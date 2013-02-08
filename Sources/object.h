@@ -228,8 +228,9 @@ public:
     };
 protected:
     template<class T>
-    void ProcessFire(int radius)
+    void ProcessFire(int radius, int how_often = 1, int how_many = 3)
     {
+        ++state_counter_;
         if (click_state() == true)
         {
             GetMap()->ForEach([this](Object* obj)
@@ -255,7 +256,7 @@ protected:
         }
 
         energy_per_sec_ = -10;
-       int diff_x = enm->pixel_x() - posx() * 32;
+        int diff_x = enm->pixel_x() - posx() * 32;
         int diff_y = enm->pixel_y() - posy() * 32;
 
         float angle_rad = (angle_ - 90.0f) * (3.14f / 180.0f);
@@ -267,14 +268,15 @@ protected:
             angle_ -= 7.0f + rand() % 32;
         else
             angle_ += 7.0f + rand() % 32;
-
-        for (int i = 0; i < 3; ++i)
-        {
-            auto e = new T(posx() * 32 + 16, posy() * 32 + 16);
-            e->Push(static_cast<int>(5 * cos((angle_ - 90.0f) * (3.14f / 180.0f))),
-                            static_cast<int>(5 * sin((angle_ - 90.0f) * (3.14f / 180.0f))));
-            GetMap()->GetEnemyHolder()->Add(e);
-        }
+        
+        if (state_counter_ % how_often == 0)
+            for (int i = 0; i < how_many; ++i)
+            {
+                auto e = new T(posx() * 32 + 16, posy() * 32 + 16);
+                e->Push(static_cast<int>(5 * cos((angle_ - 90.0f) * (3.14f / 180.0f))),
+                                static_cast<int>(5 * sin((angle_ - 90.0f) * (3.14f / 180.0f))));
+                GetMap()->GetEnemyHolder()->Add(e);
+            }
     }
 private:
     int state_counter_;
@@ -288,10 +290,10 @@ public:
     virtual void Process() override;
 };
 
-/*class Rocketgun : public Gun
+class Rocketgun : public Gun
 {
 public:
     Rocketgun(int posx, int posy)
         : Gun(posx, posy) {}
     virtual void Process() override;
-};*/
+};

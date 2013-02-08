@@ -144,6 +144,8 @@ int main(int argc, char* argv[])
             (*GetMap())[new_x][new_y] = new Drill(new_x, new_y);
         if (keys[SDLK_6] && check_new && GetPlayer()->ChangeStone(-3000))
             (*GetMap())[new_x][new_y] = new Firethrower(new_x, new_y);
+        if (keys[SDLK_7] && check_new && GetPlayer()->ChangeStone(-3000))
+            (*GetMap())[new_x][new_y] = new Rocketgun(new_x, new_y);
         if (click)
             if (keys[SDLK_5] && GetPlayer()->ChangeStone(1000))
             {

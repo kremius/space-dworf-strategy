@@ -117,6 +117,11 @@ void Drill::Process()
 void Firethrower::Process()
 {
     Gun::Process();
-    //auto t = new Rocket(posx() * 32 + 16, posy() * 32 + 16);
-    Gun::ProcessFire<Rocket>(10);
+    Gun::ProcessFire<Fire>(10);
+}
+
+void Rocketgun::Process()
+{
+    Gun::Process();
+    Gun::ProcessFire<Rocket>(20, 10, 1);
 }
