@@ -34,6 +34,8 @@ void Enemy::SetSprite(const std::string& name, int size_w, int size_h)
 
 void Enemy::ProcessSpeed(int pixel_x_to, int pixel_y_to, int force)
 {
+    pixel_x_to += 16;
+    pixel_y_to += 16;
     //auto obj = GetMap()->GetNearest(pixel_x(), pixel_y());
 
     int diff_x = pixel_x_to - pixel_x();
@@ -47,9 +49,6 @@ void Enemy::ProcessSpeed(int pixel_x_to, int pixel_y_to, int force)
             speed_.x += static_cast<int>((force) * (1.0f * diff_x / radius));
             speed_.y += static_cast<int>((force) * (1.0f * diff_y / radius));
     }
-
-   // speed_.x += rand() % 2 - 1;
-   // speed_.y += rand() % 2 - 1;
 
     if (speed_.x > 0)
         speed_.x = std::min(speed_.x,  5);
@@ -168,12 +167,18 @@ void Rocket::Process()
 
     if (enm != nullptr)
     {
-        ProcessSpeed(enm->pixel_x(), enm->pixel_y(), 1);
+       speed_.x += rand() % 2 - 1;
+       speed_.y += rand() % 2 - 1;
+        ProcessSpeed(enm->pixel_x(), enm->pixel_y(), 2);
         if ((abs(enm->pixel_x() - pixel_x()) + abs(enm->pixel_y() - pixel_y())) < 48)
         {
             GetMap()->GetEnemyHolder()->AddToDelete(this);
             getEffectOf<Explosion>()->SetPos(pixel_x(), pixel_y(), angle())->Start();
-            enm->Hit(10);
+
+            GetMap()->GetEnemyHolder()->ForEach([](Enemy* enm)
+            {
+                enm->Hit(11);
+            }, pixel_x(), pixel_y(), 64 * 64);
         }
     }
     ProcessMove();

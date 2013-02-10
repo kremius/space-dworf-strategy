@@ -23,10 +23,10 @@ void RedBlood::process()
                       y_ - GetCamera()->pixel_y() - 16, 
                       state_w_, 0 /*COLOR*/, angle_);
 
-    state_w_ = (counter_ / 2) % 4;
+    state_w_ = (counter_ / 4) % 4;
     ++counter_;
 
-    if (counter_ > 7)
+    if (counter_ > 15)
         Release();
 }
 

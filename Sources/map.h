@@ -69,6 +69,8 @@ public:
         void Process();
         int GetTimeBeforeWave() const;
         void ProcessWave();
+        void ForEach(std::function<void(Enemy*)> callback,
+                 int x = -1, int y = -1, int range = -1);
         int GetEnemyAmount() const
         {
             return enemy_amount_;
