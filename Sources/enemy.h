@@ -85,13 +85,30 @@ public:
     virtual void Process() override;
 };
 
-class Rocket: public Enemy
+class Fire: public Enemy
 {
 public:
-    Rocket(int x, int y) : Enemy(x, y) 
+    Fire(int x, int y) : Enemy(x, y) 
     {
         length_ = 0;
         SetSprite("flame1.png", 6, 1);
+
+        pixel_x_ += rand() % 9 - 4;
+        pixel_y_ += rand() % 9 - 4;
+    }
+    virtual void Process() override;
+    virtual bool IsRocketFriend() const { return true; }
+private:
+    int length_;
+};
+
+class Rocket: public Enemy
+{
+public:
+    Rocket(int x, int y) : Enemy(x, y)
+    {
+        length_ = 0;
+        SetSprite("rocket.png");
 
         pixel_x_ += rand() % 9 - 4;
         pixel_y_ += rand() % 9 - 4;
