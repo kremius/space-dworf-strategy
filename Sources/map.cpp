@@ -284,6 +284,32 @@ void Map::EnemyHolder::AddToDelete(Enemy* enemy)
     delete_list_.insert(enemy);
 }
 
+void Map::EnemyHolder::ForEach(std::function<void(Enemy*)> callback,
+                               int x, int y, int radius)
+{
+    int from_posx = std::max(x / 32 - radius / 32, 0);
+    int from_posy = std::max(y / 32 - radius / 32, 0);
+
+    int to_posx = std::min(x / 32 + radius / 32, sizeWmap - 1);
+    int to_posy = std::min(y / 32 + radius / 32, sizeHmap - 1);
+
+    for (int i = from_posx; i <= to_posx; ++i)
+        for (int j = from_posy; j <= to_posy; ++j)
+        {
+            auto it = holder_[i][j].begin();
+            while (it != holder_[i][j].end())
+            {
+                    int diff_x = (*it)->pixel_x() - x;
+                    int diff_y = (*it)->pixel_y() - y;
+                    int new_radius = diff_x * diff_x
+                                   + diff_y * diff_y;
+                    if (new_radius < radius)
+                        callback(*it);
+                    ++it;
+            }
+        }
+}
+
 Enemy* Map::EnemyHolder::GetNearest(int x, int y, int radius, std::function<bool(Enemy*)> predicate)
 {
     int from_posx = std::max(x / 32 - radius, 0);
@@ -292,7 +318,7 @@ Enemy* Map::EnemyHolder::GetNearest(int x, int y, int radius, std::function<bool
     int to_posx = std::min(x / 32 + radius, sizeWmap - 1);
     int to_posy = std::min(y / 32 + radius, sizeHmap - 1);
 
-    int min_radius = 999999999;
+    int min_radius = 999999999; // Big enough
     Enemy* retval = nullptr;
 
     for (int i = from_posx; i <= to_posx; ++i)

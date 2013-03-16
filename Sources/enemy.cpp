@@ -34,6 +34,8 @@ void Enemy::SetSprite(const std::string& name, int size_w, int size_h)
 
 void Enemy::ProcessSpeed(int pixel_x_to, int pixel_y_to, int force)
 {
+    pixel_x_to += 16;
+    pixel_y_to += 16;
     //auto obj = GetMap()->GetNearest(pixel_x(), pixel_y());
 
     int diff_x = pixel_x_to - pixel_x();
@@ -47,9 +49,6 @@ void Enemy::ProcessSpeed(int pixel_x_to, int pixel_y_to, int force)
             speed_.x += static_cast<int>((force) * (1.0f * diff_x / radius));
             speed_.y += static_cast<int>((force) * (1.0f * diff_y / radius));
     }
-
-   // speed_.x += rand() % 2 - 1;
-   // speed_.y += rand() % 2 - 1;
 
     if (speed_.x > 0)
         speed_.x = std::min(speed_.x,  5);
@@ -128,7 +127,7 @@ void Ork::Process()
     }
 }
 
-void Rocket::Process()
+void Fire::Process()
 {
     auto enm = GetMap()->GetEnemyHolder()->GetNearest(this->pixel_x(), this->pixel_y(), 7, 
                                                      [this](Enemy* e) 
@@ -144,8 +143,6 @@ void Rocket::Process()
         ProcessSpeed(enm->pixel_x(), enm->pixel_y(), 1);
         if ((abs(enm->pixel_x() - pixel_x()) + abs(enm->pixel_y() - pixel_y())) < 48)
         {
-            //GetMap()->GetEnemyHolder()->AddToDelete(enm);
-            //GetMap()->GetEnemyHolder()->AddToDelete(this);
             enm->Hit(1);
         }
     }
@@ -155,4 +152,42 @@ void Rocket::Process()
 
     if (length_ > 30)
         GetMap()->GetEnemyHolder()->AddToDelete(this);
+}
+
+void Rocket::Process()
+{
+    auto enm = GetMap()->GetEnemyHolder()->GetNearest(this->pixel_x(), this->pixel_y(), 7, 
+                                                     [this](Enemy* e) 
+        /*I AM KING OF SPACES*/                      {
+                                                         return !e->IsRocketFriend()
+                                                                && e != this;
+                                                     });
+
+    ++length_;
+
+    if (enm != nullptr)
+    {
+       speed_.x += rand() % 2 - 1;
+       speed_.y += rand() % 2 - 1;
+        ProcessSpeed(enm->pixel_x(), enm->pixel_y(), 2);
+        if ((abs(enm->pixel_x() - pixel_x()) + abs(enm->pixel_y() - pixel_y())) < 48)
+        {
+            GetMap()->GetEnemyHolder()->AddToDelete(this);
+            getEffectOf<Explosion>()->SetPos(pixel_x(), pixel_y(), angle())->Start();
+
+            GetMap()->GetEnemyHolder()->ForEach([](Enemy* enm)
+            {
+                enm->Hit(11);
+            }, pixel_x(), pixel_y(), 64 * 64);
+        }
+    }
+    ProcessMove();
+
+    state_w_ = (length_ / 2) % 4;
+
+    if (length_ > 80)
+    {
+        GetMap()->GetEnemyHolder()->AddToDelete(this);
+        getEffectOf<Explosion>()->SetPos(pixel_x(), pixel_y(), angle())->Start();
+    }
 }

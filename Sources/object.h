@@ -209,6 +209,8 @@ private:
     int state_counter_;
 };
 
+class Enemy;
+
 class Gun : public Object
 {
 public:
@@ -220,7 +222,78 @@ public:
         energy_per_sec_ = -10;
         max_energy_ = 100;
     }
-    virtual void Process() override;
+    virtual void Process() override 
+    {
+        Object::Process();
+    };
+protected:
+    template<class T>
+    void ProcessFire(int radius, int how_often = 1, int how_many = 3)
+    {
+        ++state_counter_;
+        if (click_state() == true)
+        {
+            GetMap()->ForEach([this](Object* obj)
+            {
+                if (obj == nullptr || obj == this)
+                    return;
+                if (obj->energy() <= 0 || energy() > max_energy() - 10)
+                    return;
+                int change_value = std::min(obj->energy(), 3);
+                obj->ChangeEnergy(change_value * -1);
+                ChangeEnergy(change_value - 1);
+            }, posx(), posy(), 3);
+        }
+
+        auto enm = GetMap()->GetEnemyHolder()->GetNearest(
+                             this->posx() * 32 + 16, this->posy() * 32 + 16, radius, 
+                             [](Enemy* e) { return !e->IsRocketFriend();});
+
+        if (energy() <= 10 || enm == nullptr)
+        {
+            energy_per_sec_ = 0;
+            return;
+        }
+
+        energy_per_sec_ = -10;
+        int diff_x = enm->pixel_x() - posx() * 32;
+        int diff_y = enm->pixel_y() - posy() * 32;
+
+        float angle_rad = (angle_ - 90.0f) * (3.14f / 180.0f);
+
+        int x = static_cast<int>(100 * cos(angle_rad));
+        int y = static_cast<int>(100 * sin(angle_rad));
+
+        if ((diff_x * y - diff_y * x) > 0)
+            angle_ -= 7.0f + rand() % 32;
+        else
+            angle_ += 7.0f + rand() % 32;
+        
+        if (state_counter_ % how_often == 0)
+            for (int i = 0; i < how_many; ++i)
+            {
+                auto e = new T(posx() * 32 + 16, posy() * 32 + 16);
+                e->Push(static_cast<int>(5 * cos((angle_ - 90.0f) * (3.14f / 180.0f))),
+                                static_cast<int>(5 * sin((angle_ - 90.0f) * (3.14f / 180.0f))));
+                GetMap()->GetEnemyHolder()->Add(e);
+            }
+    }
 private:
     int state_counter_;
+};
+
+class Firethrower : public Gun
+{
+public:
+    Firethrower(int posx, int posy)
+        : Gun(posx, posy) {}
+    virtual void Process() override;
+};
+
+class Rocketgun : public Gun
+{
+public:
+    Rocketgun(int posx, int posy)
+        : Gun(posx, posy) {}
+    virtual void Process() override;
 };
